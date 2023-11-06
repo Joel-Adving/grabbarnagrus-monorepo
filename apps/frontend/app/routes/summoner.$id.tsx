@@ -1,11 +1,10 @@
 import { type LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { NavLink, Outlet, useLoaderData } from '@remix-run/react'
+import { api } from 'services/api'
 import type { Summoner } from 'shared-types'
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
-  const summoner = (await fetch(`${context.env.API_URL}/summoners/by-id/${params.id}`, {
-    headers: { Authorization: `Bearer ${context.env.API_TOKEN}` }
-  }).then((res) => res.json())) as Summoner
+  const summoner = await api.get<Summoner>(context, `/summoners/by-id/${params.id}`)
   return { summoner }
 }
 

@@ -5,6 +5,7 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderD
 import globalCss from '~/global.css'
 import type { Summoner } from 'shared-types'
 import Nav from './components/Nav'
+import { api } from 'services/api'
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
@@ -12,9 +13,7 @@ export const links: LinksFunction = () => [
 ]
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const summoners = fetch(`${context.env.API_URL}/summoners`, {
-    headers: { Authorization: `Bearer ${context.env.API_TOKEN}` }
-  }).then((res) => res.json()) as Promise<Summoner[]>
+  const summoners = api.get<Summoner[]>(context, '/summoners')
   return defer({ summoners })
 }
 

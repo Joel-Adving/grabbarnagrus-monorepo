@@ -1,18 +1,15 @@
 import { type LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { useLoaderData } from '@remix-run/react'
+import { api } from 'services/api'
 import type { Match, Summoner } from 'shared-types'
 
 export const LEAGUE_CDN = 'http://ddragon.leagueoflegends.com/cdn/13.21.1'
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
-  const url = context.env.API_URL
-  const headers = { Authorization: `Bearer ${context.env.API_TOKEN}` }
-  const summoner = (await fetch(`${url}/summoners/by-id/${params.id}`, { headers }).then((res) =>
-    res.json()
-  )) as Summoner
-  const matches = (await fetch(`${url}/matches/summoner/by-id/${summoner.id}`, { headers }).then((res) =>
-    res.json()
-  )) as Match[]
+  const [summoner, matches] = await Promise.all([
+    api.get<Summoner>(context, `/summoners/by-id/${params.id}`),
+    api.get<Match[]>(context, `/matches/summoner/by-id/${params.id}`)
+  ])
   return { summoner, matches }
 }
 
