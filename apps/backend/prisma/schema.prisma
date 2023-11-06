@@ -1,0 +1,100 @@
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+}
+
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.Text
+    session_state     String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+model Summoner {
+    id            Int           @id @default(autoincrement())
+    summonerId    String        @unique
+    name          String        @unique
+    accountId     String        @unique
+    profileIconId Int
+    puuid         String
+    revisionDate  BigInt
+    summonerLevel Int
+    rankedStats   RankedStats[]
+    matchHistory  Match[]
+}
+
+model RankedStats {
+    id           Int      @id @default(autoincrement())
+    summonerId   String
+    freshBlood   Boolean
+    hotStreak    Boolean
+    inactive     Boolean
+    leagueId     String
+    leaguePoints Int
+    losses       Int
+    queueType    String
+    rank         String
+    summonerName String
+    tier         String
+    veteran      Boolean
+    wins         Int
+    summoner     Summoner @relation(fields: [summonerId], references: [summonerId])
+}
+
+model Match {
+    id        Int        @id @default(autoincrement())
+    date      BigInt
+    matchId   String     @unique
+    info      Json
+    metaData  Json
+    summoners Summoner[]
+}
+
+model LastUpdated {
+    id         Int    @id @default(autoincrement())
+    summonerId String
+    name       String
+}

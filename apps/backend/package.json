@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/static": "^0.7.1",
+    "@prisma/client": "5.5.2",
+    "elysia": "latest",
+    "mysql2": "^3.6.3",
+    "prisma": "5.5.2"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}
