@@ -16,18 +16,18 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 export default function SummonerMatches() {
   const { summoner, matches } = useLoaderData<typeof loader>()
 
-  if (summoner.error || matches.error) {
+  if (summoner?.error || matches?.error) {
     return (
       <>
-        <div>{summoner.error}</div>
-        <div>{matches.error}</div>
+        <div>{summoner?.error}</div>
+        <div>{matches?.error}</div>
       </>
     )
   }
 
   return (
     <section className="flex flex-col flex-grow pt-4 gap-2.5">
-      {matches.map((match: any) => {
+      {matches.data.map((match: any) => {
         const { info } = match
         if (!info) return null
         const playerStats = info?.participants.find((el: any) => el.puuid === summoner.data.puuid)
