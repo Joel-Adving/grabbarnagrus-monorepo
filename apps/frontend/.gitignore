@@ -13,4 +13,3 @@ node_modules
 
 .wrangler/tmp
 .wrangler/state
-wrangler.toml

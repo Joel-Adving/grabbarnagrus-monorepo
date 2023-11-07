@@ -32,7 +32,6 @@ yarn-error.log*
 
 **/.wrangler/tmp
 **/.wrangler/state
-**/wrangler.toml
 
 .env*
 .env.production
