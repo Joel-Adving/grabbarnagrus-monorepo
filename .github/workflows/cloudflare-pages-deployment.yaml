@@ -22,14 +22,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup env
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install --frozen-lockfile
+
+      - name: Replace KV Namespace ID
+        run: sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}/g' wrangler.toml
+
       - name: Build
         run: pnpm run build
+
       - name: Publish
         run: pnpm run pages:deploy --project-name grabbarnagrus
         env:
