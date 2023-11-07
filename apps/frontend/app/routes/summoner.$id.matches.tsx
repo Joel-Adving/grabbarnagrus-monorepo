@@ -18,10 +18,10 @@ export default function SummonerMatches() {
 
   if (summoner.error || matches.error) {
     return (
-      <pre>
-        {JSON.stringify(summoner.error, null, 2)}
-        {JSON.stringify(matches.error, null, 2)}
-      </pre>
+      <>
+        <div>{summoner.error}</div>
+        <div>{matches.error}</div>
+      </>
     )
   }
 

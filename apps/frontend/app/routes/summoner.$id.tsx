@@ -12,7 +12,7 @@ export default function SummonerName() {
   const { data, error } = useLoaderData<typeof loader>()
 
   if (error) {
-    return <pre>{JSON.stringify(error, null, 2)}</pre>
+    return <div>{error}</div>
   }
 
   return (

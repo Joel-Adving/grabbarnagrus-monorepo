@@ -10,8 +10,7 @@ export const api = {
         return { data: JSON.parse(cached) as T, error }
       }
     } catch (e) {
-      error = JSON.stringify(e)
-      console.log(e)
+      error = `KV error, ${ctx?.env?.KV}`
     }
 
     const res = await fetch(ctx.env.API_URL + endpoint, {
@@ -25,8 +24,7 @@ export const api = {
     try {
       await ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl })
     } catch (e) {
-      console.log(e)
-      error = JSON.stringify(e)
+      error = `KV error, ${ctx?.env?.KV}`
     }
 
     return {
