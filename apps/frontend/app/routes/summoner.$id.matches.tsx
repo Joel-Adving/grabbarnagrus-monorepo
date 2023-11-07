@@ -16,11 +16,11 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 export default function SummonerMatches() {
   const { summoner, matches } = useLoaderData<typeof loader>()
 
-  if (summoner.data.error || matches.data.error) {
+  if (summoner.error || matches.error) {
     return (
       <pre>
-        {JSON.stringify(summoner.data.error, null, 2)}
-        {JSON.stringify(matches.data.error, null, 2)}
+        {JSON.stringify(summoner.error, null, 2)}
+        {JSON.stringify(matches.error, null, 2)}
       </pre>
     )
   }
