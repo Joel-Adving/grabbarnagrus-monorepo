@@ -30,8 +30,9 @@ yarn-error.log*
 # turbo
 .turbo
 
-.wrangler/tmp
-.wrangler/state
+**/.wrangler/tmp
+**/.wrangler/state
+**/wrangler.toml
 
 .env*
 .env.production

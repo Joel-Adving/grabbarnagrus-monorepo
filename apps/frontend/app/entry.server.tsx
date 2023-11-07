@@ -29,18 +29,9 @@ export default async function handleRequest(
     await body.allReady
   }
 
-  //   const paths = [
-  //     { path: '/summoner', cacheControl: 'public, s-maxage=3600, stale-while-revalidate=60' },
-  //     { path: '/', cacheControl: 'public, s-maxage=3600, stale-while-revalidate=60' }
-  //   ]
-  const defaultCache = 'public, s-maxage=3600, stale-while-revalidate=60'
-  //   const requestPath = new URL(request.url).pathname
-  //   const cacheConfig =
-  //     paths.find((route) => requestPath === route.path || requestPath.startsWith(route.path + '/'))?.cacheControl ||
-  //     defaultCache
-  responseHeaders.set('Cache-Control', defaultCache)
-
   responseHeaders.set('Content-Type', 'text/html')
+  responseHeaders.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=60')
+
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode
