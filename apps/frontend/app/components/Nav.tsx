@@ -2,7 +2,7 @@ import { Await, NavLink } from '@remix-run/react'
 import { Suspense } from 'react'
 import type { Summoner } from 'shared-types'
 
-export default function Nav({ summoners }: { summoners: Promise<Summoner[]> }) {
+export default function Nav({ summoners }: { summoners: Promise<{ data: Summoner[]; error: any }> }) {
   return (
     <div className="sticky lef-0 top-0 h-[100dvh] max-w-[12.5rem] w-full p-5 overflow-x-auto bg-slate-950">
       <Suspense fallback={<Skeleton />}>
@@ -12,10 +12,14 @@ export default function Nav({ summoners }: { summoners: Promise<Summoner[]> }) {
   )
 }
 
-function NavItems({ summoners }: { summoners: Summoner[] }) {
+function NavItems({ summoners }: { summoners: { data: Summoner[]; error: any } }) {
+  if (summoners.error) {
+    return <pre>{JSON.stringify(summoners.error, null, 2)}</pre>
+  }
+
   return (
     <ul className="flex flex-col gap-1.5 text-xl text-zinc-300">
-      {summoners.map(({ name, id }) => (
+      {summoners.data.map(({ name, id }) => (
         <li key={id}>
           <NavLink to={`/summoner/${id}/matches`} className="flex hover:underline hover:text-zinc-100">
             {name}
