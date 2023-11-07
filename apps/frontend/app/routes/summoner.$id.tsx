@@ -4,16 +4,20 @@ import { api } from 'services/api'
 import type { Summoner } from 'shared-types'
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
-  const summoner = await api.get<Summoner>(context, `/summoners/by-id/${params.id}`)
-  return { summoner }
+  const res = await api.get<Summoner>(context, `/summoners/by-id/${params.id}`)
+  return res
 }
 
 export default function SummonerName() {
-  const { summoner } = useLoaderData<typeof loader>()
+  const { data, error } = useLoaderData<typeof loader>()
+
+  if (error) {
+    return <pre>{JSON.stringify(error, null, 2)}</pre>
+  }
 
   return (
     <div>
-      <h1 className="text-4xl">{summoner.name}</h1>
+      <h1 className="text-4xl">{data.name}</h1>
       <nav className="flex gap-3 pt-4 text-xl text-zinc-300">
         <NavLink to="matches" className="hover:underline hover:text-zinc-100">
           Matches
@@ -23,7 +27,7 @@ export default function SummonerName() {
         </NavLink>
       </nav>
       <div className="pt-4">
-        <Outlet context={summoner} />
+        <Outlet context={data} />
       </div>
     </div>
   )

@@ -16,18 +16,27 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 export default function SummonerMatches() {
   const { summoner, matches } = useLoaderData<typeof loader>()
 
+  if (summoner.data.error || matches.data.error) {
+    return (
+      <pre>
+        {JSON.stringify(summoner.data.error, null, 2)}
+        {JSON.stringify(matches.data.error, null, 2)}
+      </pre>
+    )
+  }
+
   return (
     <section className="flex flex-col flex-grow pt-4 gap-2.5">
       {matches.map((match: any) => {
         const { info } = match
         if (!info) return null
-        const playerStats = info?.participants.find((el: any) => el.puuid === summoner.puuid)
+        const playerStats = info?.participants.find((el: any) => el.puuid === summoner.data.puuid)
         if (!playerStats) return null
         const win = playerStats?.win
 
         return (
           <a
-            href={`/match/${match.metaData.matchId}?summoner=${summoner.name}`}
+            href={`/match/${match.metaData.matchId}?summoner=${summoner.data.name}`}
             className={`
                 py-3 border-[1px] rounded border-transparent border-b-neutral-700 border-r-0
                 text-text-light flex sm:justify-between justify-evenly
