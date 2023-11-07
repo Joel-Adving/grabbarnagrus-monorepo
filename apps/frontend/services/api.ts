@@ -2,10 +2,13 @@ import type { LoaderFunctionArgs } from '@remix-run/cloudflare'
 
 export const api = {
   async get<T>(ctx: LoaderFunctionArgs, endpoint: string, { expirationTtl = 3600 } = {}) {
-    const cached = await ctx.env.KV.get(endpoint)
-
-    if (cached) {
-      return JSON.parse(cached) as T
+    try {
+      const cached = await ctx.env.KV.get(endpoint)
+      if (cached) {
+        return JSON.parse(cached) as T
+      }
+    } catch (e) {
+      console.log(e)
     }
 
     const res = await fetch(ctx.env.API_URL + endpoint, {
@@ -15,7 +18,13 @@ export const api = {
     })
 
     const data = await res.json()
-    await ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl })
+
+    try {
+      await ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl })
+    } catch (e) {
+      console.log(e)
+    }
+
     return data as T
   }
 }
