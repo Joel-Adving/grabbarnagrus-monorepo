@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs } from '@remix-run/cloudflare'
+import { json, type LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { useLoaderData } from '@remix-run/react'
 import { api } from 'services/api'
 import type { Match, Summoner } from 'shared-types'
@@ -10,33 +10,24 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     api.get<Summoner>(context, `/summoners/by-id/${params.id}`),
     api.get<Match[]>(context, `/matches/summoner/by-id/${params.id}`)
   ])
-  return { summoner, matches }
+  return json({ summoner, matches })
 }
 
 export default function SummonerMatches() {
   const { summoner, matches } = useLoaderData<typeof loader>()
 
-  if (summoner?.error || matches?.error) {
-    return (
-      <>
-        <div>{summoner?.error}</div>
-        <div>{matches?.error}</div>
-      </>
-    )
-  }
-
   return (
     <section className="flex flex-col flex-grow pt-4 gap-2.5">
-      {matches.data.map((match: any) => {
+      {matches.map((match: any) => {
         const { info } = match
         if (!info) return null
-        const playerStats = info?.participants.find((el: any) => el.puuid === summoner.data.puuid)
+        const playerStats = info?.participants.find((el: any) => el.puuid === summoner.puuid)
         if (!playerStats) return null
         const win = playerStats?.win
 
         return (
           <a
-            href={`/match/${match.metaData.matchId}?summoner=${summoner.data.name}`}
+            href={`/match/${match.metaData.matchId}?summoner=${summoner.name}`}
             className={`
                 py-3 border-[1px] rounded border-transparent border-b-neutral-700 border-r-0
                 text-text-light flex sm:justify-between justify-evenly
