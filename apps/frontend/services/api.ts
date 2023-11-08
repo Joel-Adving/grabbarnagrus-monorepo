@@ -1,35 +1,19 @@
 import type { LoaderFunctionArgs } from '@remix-run/cloudflare'
 
 export const api = {
-  async get<T>(ctx: LoaderFunctionArgs, endpoint: string, { expirationTtl = 3600 } = {}) {
-    let error = null
+  async get<DataStruct>(ctx: LoaderFunctionArgs, endpoint: string, { expirationTtl = 3600 } = {}) {
+    const cached = await ctx.env.KV.get(endpoint).catch(() => null)
 
-    try {
-      const cached = await ctx.env.KV.get(endpoint)
-      if (cached) {
-        return { data: JSON.parse(cached) as T, error }
-      }
-    } catch (e) {
-      error = `KV error, ${ctx?.env?.KV}`
+    if (cached) {
+      return JSON.parse(cached) as DataStruct
     }
 
-    const res = await fetch(ctx.env.API_URL + endpoint, {
-      headers: {
-        Authorization: 'Bearer ' + ctx.env.API_TOKEN
-      }
-    })
+    const data = await fetch(ctx.env.API_URL + endpoint, { headers: { Authorization: 'Bearer ' + ctx.env.API_TOKEN } })
+      .then((res) => res.json())
+      .catch(() => null)
 
-    const data = await res.json()
+    await ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl }).catch(() => null)
 
-    try {
-      await ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl })
-    } catch (e) {
-      error = `KV error, ${ctx?.env?.KV}`
-    }
-
-    return {
-      data: data as T,
-      error
-    }
+    return data as DataStruct
   }
 }
