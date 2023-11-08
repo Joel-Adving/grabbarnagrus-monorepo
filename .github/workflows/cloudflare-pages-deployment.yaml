@@ -31,12 +31,13 @@ jobs:
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install --frozen-lockfile
 
-      - name: Replace wrangler.tml ENVs
-        run: |
-          touch .env
-          echo CLOUDFLARE_KV_NAMESPACE_ID="123" >> .env
-          sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$CLOUDFLARE_KV_NAMESPACE_ID'/g' wrangler.toml
-          cat wrangler.toml
+      # - name: Replace wrangler.tml ENVs
+      #   run: |
+      #     sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$CLOUDFLARE_KV_NAMESPACE_ID'/g' wrangler.toml
+      #     cat wrangler.toml
+      #     cat
+      #   env:
+      #     CLOUDFLARE_KV_NAMESPACE_ID: ${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}
 
       - name: Build
         run: pnpm run build
