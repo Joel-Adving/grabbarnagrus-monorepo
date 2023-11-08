@@ -35,6 +35,8 @@ jobs:
         run: |
           sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$CLOUDFLARE_KV_NAMESPACE_ID'/g' wrangler.toml
           cat wrangler.toml
+          cat $CLOUDFLARE_KV_NAMESPACE_ID
+          cat $HOME
         env:
           CLOUDFLARE_KV_NAMESPACE_ID: ${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}
 
