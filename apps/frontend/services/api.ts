@@ -12,7 +12,7 @@ export const api = {
       .then((res) => res.json())
       .catch(() => null)
 
-    await ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl }).catch(() => null)
+    ctx.env.KV.put(endpoint, JSON.stringify(data), { expirationTtl }).catch(() => null)
 
     return data as DataStruct
   }
