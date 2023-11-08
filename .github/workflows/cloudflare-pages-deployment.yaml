@@ -34,11 +34,9 @@ jobs:
       - name: Replace wrangler.tml ENVs
         run: |
           touch .env
-          echo CLOUDFLARE_KV_NAMESPACE_ID="${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}" >> .env
-          cat .env
-          sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$CLOUDFLARE_KV_NAMESPACE_ID'/g' wrangler.toml
+          echo CLOUDFLARE_KV_NAMESPACE_ID="123" >> .env
+          sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$123'/g' wrangler.toml
           cat wrangler.toml
-          cat $CLOUDFLARE_KV_NAMESPACE_ID
 
       - name: Build
         run: pnpm run build
