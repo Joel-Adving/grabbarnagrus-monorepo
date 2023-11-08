@@ -35,7 +35,7 @@ jobs:
         run: |
           touch .env
           echo CLOUDFLARE_KV_NAMESPACE_ID="123" >> .env
-          sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$123'/g' wrangler.toml
+          sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/'$CLOUDFLARE_KV_NAMESPACE_ID'/g' wrangler.toml
           cat wrangler.toml
 
       - name: Build
