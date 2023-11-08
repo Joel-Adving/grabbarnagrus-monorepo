@@ -35,6 +35,7 @@ jobs:
         run: |
           sed -i 's/CLOUDFLARE_KV_NAMESPACE_ID/${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}/g' wrangler.toml
           sed -i 's/CLOUDFLARE_ACCOUNT_ID/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/g' wrangler.toml
+          cat wrangler.toml
 
       - name: Build
         run: pnpm run build
