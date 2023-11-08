@@ -30,7 +30,7 @@ export default async function handleRequest(
   }
 
   responseHeaders.set('Content-Type', 'text/html')
-  responseHeaders.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=60')
+  //   responseHeaders.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=60')
 
   return new Response(body, {
     headers: responseHeaders,
