@@ -32,9 +32,9 @@ export default function SummonerMatches() {
             href={`/match/${match.metaData.matchId}?summoner=${summoner.name}`}
             className={`
                 py-3 border-[1px] rounded border-transparent border-b-neutral-700 border-r-0
-                text-text-light flex sm:justify-between justify-evenly
+                text-text-light flex justify-between px-4
                 hover:border-gold hover:border-l-gold border-l-[5px] pl-2.5 hover:pl-5 transition-all
-                duration-75 hover:cursor-pointer bg-opacity-50 hover:bg-opacity-80
+                duration-75 hover:cursor-pointer bg-opacity-50 hover:bg-opacity-80 font-semibold
                 ${win ? 'bg-teal-300' : 'bg-red-400'}
             `}
             key={match.info.gameId}
