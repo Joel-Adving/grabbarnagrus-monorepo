@@ -7,7 +7,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const summoner = await api.get<Summoner>(context, `/summoners/by-id/${params.id}`)
   const rankedStats = await api.get<RankedStats[]>(
     context,
-    `/summoners/rankedStats/by-summonerId/${summoner.summonerId}`
+    `/summoners/rankedStats/by-summonerId/${summoner?.summonerId}`
   )
   return json({ rankedStats })
 }

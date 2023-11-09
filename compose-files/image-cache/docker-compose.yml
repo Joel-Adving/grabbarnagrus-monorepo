@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  thumbor:
+    image: apsl/thumbor
+    ports:
+      - '8080:8000'
+    environment:
+      MAX_AGE: 604800 # 1 week
+      RESULT_STORAGE_EXPIRATION_SECONDS: 31556926 # 1 year

@@ -2,6 +2,7 @@ import { json, type LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { useLoaderData } from '@remix-run/react'
 import { api } from 'services/api'
 import type { Match, Summoner } from 'shared-types'
+import Image from '~/components/Image'
 
 export const LEAGUE_CDN = 'http://ddragon.leagueoflegends.com/cdn/13.21.1'
 
@@ -10,11 +11,12 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     api.get<Summoner>(context, `/summoners/by-id/${params.id}`),
     api.get<Match[]>(context, `/matches/summoner/by-id/${params.id}`)
   ])
-  return json({ summoner, matches })
+  const { IMAGE_PROXY, IMAGE_PROXY_SECRET } = context.env
+  return json({ summoner, matches, IMAGE_PROXY, IMAGE_PROXY_SECRET })
 }
 
 export default function SummonerMatches() {
-  const { summoner, matches } = useLoaderData<typeof loader>()
+  const { summoner, matches, IMAGE_PROXY, IMAGE_PROXY_SECRET } = useLoaderData<typeof loader>()
 
   return (
     <section className="flex flex-col flex-grow pt-4 gap-2.5">
@@ -40,11 +42,13 @@ export default function SummonerMatches() {
             <div className="flex flex-col items-center sm:flex-row">
               <div className="relative">
                 <div className="w-14 h-14 border-slate-300 rounded-full border-[2.5px] overflow-hidden">
-                  <img
+                  <Image
+                    IMAGE_PROXY={IMAGE_PROXY}
+                    IMAGE_PROXY_SECRET={IMAGE_PROXY_SECRET}
                     src={`${LEAGUE_CDN}/img/champion/${playerStats.championName}.png`}
                     alt="Champion splash art"
-                    height={56}
-                    width={56}
+                    height={80}
+                    width={80}
                     className="rounded-full"
                   />
                 </div>

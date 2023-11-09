@@ -31,6 +31,8 @@ export default async function handleRequest(
 
   responseHeaders.set('Content-Type', 'text/html')
   responseHeaders.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=60')
+  //   responseHeaders.set('Vary', 'Accept')
+  responseHeaders.set('Accept', 'image/webp,image/apng,image/*,*/*;q=0.8')
 
   return new Response(body, {
     headers: responseHeaders,
